@@ -1,10 +1,12 @@
 # SIR, SEIR and SEIRt modeling and inversion
 
-The coronavirus (COVID-19) struck planet Earth in early 2020, just after immense wild-fires struck Australia, and a possible US-Iran armed conflict seemed imminent. It had been quite a year so far.
+The coronavirus (COVID-19) struck planet Earth in early 2020, just after immense wild-fires burned in Australia, and a possible US-Iran armed conflict seemed imminent. It had been quite a year so far.
 
 The entire planet went into quarantine. First for two weeks, then for a month, then ...
 
 **Can we _estimate_ ahead of time how long we are to be locked down?**
+
+Moreover, **can we make this estimate based only on observed data?**
 
 Go to **Examples** below if you're not into reading. 
 
@@ -85,6 +87,8 @@ This enables two useful properties,
 A possible way of ending the lockdown is some time after the last _infectious_ case. Using property 1, the zero crossing of dt(_infectious_) gives the time when no new cases arise (plotted in blue). In orange, a two month period after the last estimated _infectious_ case is shown.
 
 Another way of ending the lockdown is when hospitals are relieved of COVID-19 cases. Yellow shows when only 5% of the peak of _infectious_ is reached. This rests on property 2.
+
+_Assuming the SEIRt model captures the nature of the coronavirus spread, estimates on the end of the lockdown can be made only on the John Hopkings observed data._
 
 __Estimate on lockdown end__
 
