@@ -10,9 +10,15 @@ Moreover, **can we make this estimate based only on observed data?**
 
 Go to **Examples** below if you're not into reading. 
 
-For the US and Europe, the data, the model, the inversion and the cut-off criteria suggest __late April - early May__.
+By early April, for the US and Europe, the data, the model, the inversion and the cut-off criteria suggest __late April - early May__.
 
-![](pics/seirt-US.png)
+The pictures below are estimated with data from mid April.
+
+![](pics/US-end.png)
+
+![](pics/Italy-end.png)
+
+![](pics/Germany-end.png)
 
 ## The SIR, SEIR and SEIRt models
 
@@ -90,7 +96,7 @@ Another way of ending the lockdown is when hospitals are relieved of COVID-19 ca
 
 _Assuming the SEIRt model captures the nature of the coronavirus spread, estimates on the end of the lockdown can be made only on the John Hopkings observed data._
 
-__Estimate on lockdown end__
+__Estimate on lockdown end (by early April)__
 
 Most countries in the western northern hemisphere have the yellow (5% of peak cases) and orange (one month after last infected) cut-off times by __late April or early May__. In contrast other countries like Iran, Argentina and Peru show a yellow cut-off by __August__. 
 

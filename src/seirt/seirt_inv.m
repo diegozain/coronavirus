@@ -30,45 +30,56 @@ while (iter<corona_.niter & corona_.E>corona_.tol_error)
  corona_.grad_= seirt_grad(corona_);
  % -----------------------------------------------------------------------------
  % regularization can go here
- % corona_.grad_ = corona_.grad_ .* [1e-2; 1e+1; 1e+1; 1e+1; 1e+1; 1e+1];
- % corona_.grad_ = corona_.grad_ + corona_.bo*(corona_.p-corona_.po);
+ 
  % -----------------------------------------------------------------------------
+ % store the gradient as update so the step-size computation is independent of 
+ % grad descent or gauss-newton routines
  corona_.update_ = - corona_.grad_;
  % ---------------------------------------------------------------------------
- % bfgs
- q        =  corona_.p - corona_.p_;
- y        =  corona_.grad_ - corona_.grad__;
- corona_.H=  broflegos(corona_.H,q,y);
+ % 
+ %                        second order methods
+ % 
  % ---------------------------------------------------------------------------
+ q =  corona_.p - corona_.p_;
+ y =  corona_.grad_ - corona_.grad__;
+ % ---------------------------------------------------------------------------
+ %                            bfgs = Hessian
+ % ---------------------------------------------------------------------------
+ % approximate the hessian
+ corona_.H        =  broflegos(corona_.H,q,y);
+ % ---------------------------------------------------------------------------
+ % find boh
+ 
+ % ---------------------------------------------------------------------------
+ % bgfs update
+ corona_.update_  = -(corona_.H + boH*eye(size(corona_.H) )) \ corona_.grad_;
+ % ---------------------------------------------------------------------------
+ %                            bfgs = inverse( Hessian )
+ % ---------------------------------------------------------------------------
+ % approximate the inverse of the hessian
+ corona_.B      =  broflegos(corona_.B,q,y);
+ % ---------------------------------------------------------------------------
+ % bgfs update
+ corona_.update_= - corona_.B * corona_.grad_;
+ % ---------------------------------------------------------------------------
+ % store gradient and parameters for next iteration
  corona_.grad__= corona_.grad_;
  corona_.p_    = corona_.p;
- % ---------------------------------------------------------------------------
- if ~isfield(corona_,'boH')
-   boH = 1e-2*abs(mean(corona_.H(:)));
-   boH = max(boH,5e-6);
- else
-   boH = corona_.boH;
- end
- corona_.update_  = -(corona_.H + boH*eye(size(corona_.H) )) \ corona_.grad_;
  % -----------------------------------------------------------------------------
- % variable step size
- if isfield(corona_,'step_')
-   step_ = corona_.step_;
- elseif isfield(corona_,'perturb')
-   step_ = seirt_step(corona_);
- elseif isfield(corona_,'step_ave') 
-   step_ = 1/5/norm(corona_.update_);
- else 
-   step_ = 1;
- end
+ % 
+ %                     find the right step-size
+ % 
  % -----------------------------------------------------------------------------
+ step_ = seirt_step(corona_);
+ % -----------------------------------------------------------------------------
+ % compute the update with the right step-size 
  update_ = step_*corona_.update_;
  % -----------------------------------------------------------------------------
- % % momentum 
- % update_ = update_ + 2e-1*update__;
- % update__= update_;
+ % momentum 
+ 
  % -----------------------------------------------------------------------------
- % update
+ %                                 update
+ % -----------------------------------------------------------------------------
  corona_.p  = corona_.p.*exp(corona_.p.*(update_));
  % -----------------------------------------------------------------------------
  E_history  = [E_history corona_.E];

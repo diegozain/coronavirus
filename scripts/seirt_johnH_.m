@@ -78,7 +78,7 @@ corona_.p_ubounds = [1 2 1 1 1 2 1 2];
 corona_.p_lbounds = zeros(1,size(p,1));
 % ------------------------------------------------------------------------------
 % record initial guess to see how far off we were
-corona_.f = zeros(numel(corona_.t),1);
+corona_.f = zeros(numel(corona_.t),7);
 u_init    = seirt_fwd(corona_);
 % ------------------------------------------------------------------------------
 %                      inversion parameters
@@ -127,10 +127,10 @@ fprintf('\n\n\n')
 % plot the true, initial and recovered models.
 % ------------------------------------------------------------------------------
 figure;
-semilogy(corona_.t_,corona_.do_(:,3),'ro','markersize',5)
+semilogy(corona_.t_,corona_.do_(:,3),'r.','markersize',25)
 hold on
-semilogy(corona_.t_,corona_.do_(:,1),'bo','markersize',5)
-semilogy(corona_.t_,corona_.do_(:,2),'ko','markersize',5)
+semilogy(corona_.t_,corona_.do_(:,1),'b.','markersize',25)
+semilogy(corona_.t_,corona_.do_(:,2),'k.','markersize',25)
 semilogy(corona_.t,u_init(:,4),'r-.')
 semilogy(corona_.t,u_init(:,5),'b-.')
 semilogy(corona_.t,u_init(:,6),'k-.')
@@ -153,7 +153,11 @@ days      = 3*31;
 corona_.t = 0:corona_.dt:(corona_.t(end) + days);
 corona_.nt= numel(corona_.t);
 % run the fwd model again to see how we did
-corona_.f = zeros(numel(corona_.t),1);
+% ------------------------------------------------------------------------------
+% here you can change the source and have new things happening at later times
+corona_.f = zeros(numel(corona_.t),7);
+% corona_.f(60,:) = [0,0,100,-100,0,0,0];
+% ------------------------------------------------------------------------------
 corona_.u = seirt_fwd(corona_);
 corona_.d = seirt_u2d(corona_);
 t_obs = datetime(datestr(corona_.t_(:) + dates(istart)));
@@ -164,9 +168,9 @@ hold on
 plot(t, corona_.d(:,3),'r-')
 plot(t, corona_.d(:,1),'b-')
 plot(t, corona_.d(:,2),'k-')
-plot(t_obs,corona_.do_(:,3),'ro','markersize',5)
-plot(t_obs,corona_.do_(:,1),'bo','markersize',5)
-plot(t_obs,corona_.do_(:,2),'ko','markersize',5)
+plot(t_obs,corona_.do_(:,3),'r.','markersize',25)
+plot(t_obs,corona_.do_(:,1),'b.','markersize',25)
+plot(t_obs,corona_.do_(:,2),'k.','markersize',25)
 hold off
 grid on
 axis tight
@@ -176,18 +180,18 @@ ylabel('Population')
 title(strcat('SEIRt model',{' '},place_name))
 simple_figure();
 % ------------------------------------------------------------------------------
-figure;
-hold on
-plot(t, corona_.u(:,3),'c-','linewidth',5)
-plot(t, corona_.d(:,2),'k-','linewidth',5)
-hold off
-grid on
-axis tight
-legend('Infectious','Dead')
-xlabel('Time (days)')
-ylabel('Population')
-title(strcat('SEIRt model',{' '},place_name))
-simple_figure();
+% figure;
+% hold on
+% plot(t, corona_.u(:,3),'c-','linewidth',5)
+% plot(t, corona_.d(:,2),'k-','linewidth',5)
+% hold off
+% grid on
+% axis tight
+% legend('Infectious','Dead')
+% xlabel('Time (days)')
+% ylabel('Population')
+% title(strcat('SEIRt model',{' '},place_name))
+% simple_figure();
 % ------------------------------------------------------------------------------
 % now let's see the rate of change of infectious cases.
 % 
@@ -218,19 +222,19 @@ it_zero = it_zero + fix(15/corona_.dt);
 t_open = corona_.t(it_zero) + 2*14;
 t_open = datetime(datestr( t_open  + dates(istart) ));
 % ------------------------------------------------------------------------------
-figure;
-hold on
-plot(t, dti,'-')
-% plot(t, dtu(dti,corona_.dt),'.-')
-plot([t(it_zero),t(it_zero)] , [min(dti),max(dti)] ,'--','linewidth',5)
-plot([t_open,t_open] , [min(dti),max(dti)] ,'--','linewidth',5)
-hold off
-grid on
-axis tight
-xlabel('Time (days)')
-ylabel('Population')
-title(strcat('SEIRt model',{' '},place_name,{' - new cases'}))
-simple_figure();
+% figure;
+% hold on
+% plot(t, dti,'-')
+% % plot(t, dtu(dti,corona_.dt),'.-')
+% plot([t(it_zero),t(it_zero)] , [min(dti),max(dti)] ,'--','linewidth',5)
+% plot([t_open,t_open] , [min(dti),max(dti)] ,'--','linewidth',5)
+% hold off
+% grid on
+% axis tight
+% xlabel('Time (days)')
+% ylabel('Population')
+% title(strcat('SEIRt model',{' '},place_name,{' - new cases'}))
+% simple_figure();
 % ------------------------------------------------------------------------------
 % but maybe it would be a better idea to open up until after there are only, 
 % say, 1000 infectious.
@@ -251,10 +255,23 @@ plot([t(it_infec),t(it_infec)] , [ymini,ymaxi] ,'--','linewidth',5)
 hold off
 grid on
 axis tight
-legend('Infectious','Dead (cummulative)','Zero new cases','Month after zero new cases','5% of peak infectious left')
+legend('Infectious','Dead (cumulative)','Zero new cases','Month after zero new cases','5% of peak infectious left')
 xlabel('Time (days)')
 ylabel('Population')
 title(strcat('SEIRt model',{' '},place_name))
 simple_figure();
+% ------------------------------------------------------------------------------
+% this part is for plotting in python
+dead       = corona_.d(:,2);
+infectious = corona_.u(:,3);
+time_      = datenum(t);
+% ------------------------------------------------------------------------------
+save(strcat(path_,'dead'),'dead')
+save(strcat(path_,'infectious'),'infectious')
+save(strcat(path_,'time_'),'time_')
+save(strcat(path_,'t'),'t')
+save(strcat(path_,'it_infec'),'it_infec')
+% ------------------------------------------------------------------------------
+!python viewer_end.py
 % ------------------------------------------------------------------------------
 %}
