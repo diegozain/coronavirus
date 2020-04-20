@@ -16,10 +16,6 @@ The pictures below are estimated with data from mid April.
 
 ![](pics/US-end.png)
 
-![](pics/Italy-end.png)
-
-![](pics/Germany-end.png)
-
 ## The SIR, SEIR and SEIRt models
 
 These models attempt to capture the time-dependent dynamics of a population interacting with a virus. 
