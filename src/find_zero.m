@@ -3,5 +3,9 @@ function it = find_zero(u,val)
 it=1;
 while u(it)>val
  it=it+1;
+ if it>numel(u)
+   it = numel(u);
+   break
+ end
 end
 end

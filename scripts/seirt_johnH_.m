@@ -141,7 +141,7 @@ hold off
 axis tight
 legend('Active','Recovered','Dead')
 xlabel('Time (days)')
-ylabel('Population')
+ylabel('Number of people')
 title(strcat('True ( o ) Initial ( -. ) Recovered ( - )',{' '},place_name))
 simple_figure();
 % ------------------------------------------------------------------------------
@@ -172,13 +172,18 @@ plot(t_obs,corona_.do_(:,3),'r.','markersize',25)
 plot(t_obs,corona_.do_(:,1),'b.','markersize',25)
 plot(t_obs,corona_.do_(:,2),'k.','markersize',25)
 hold off
-grid on
 axis tight
+grid on
 legend('Active','Recovered','Dead')
 xlabel('Time (days)')
-ylabel('Population')
+ylabel('Number of people')
 title(strcat('SEIRt model',{' '},place_name))
 simple_figure();
+% ------------------------------------------------------------------------------
+name_pic = strcat('../pics/',place_name,'-fit');
+fig = gcf;
+print(gcf,name_pic,'-dpng','-r20')
+print(gcf,name_pic,'-dpng')
 % ------------------------------------------------------------------------------
 % figure;
 % hold on
@@ -189,7 +194,7 @@ simple_figure();
 % axis tight
 % legend('Infectious','Dead')
 % xlabel('Time (days)')
-% ylabel('Population')
+% ylabel('Number of people')
 % title(strcat('SEIRt model',{' '},place_name))
 % simple_figure();
 % ------------------------------------------------------------------------------
@@ -217,6 +222,9 @@ dti = dtu(corona_.u(:,3),corona_.dt);
 % in corona_.u(:,3) at early times.
 it_zero = find_zero(dti( fix(15/corona_.dt):end ) , 0);
 it_zero = it_zero + fix(15/corona_.dt);
+if it_zero>numel(corona_.t)
+ it_zero=numel(corona_.t);
+end
 % ------------------------------------------------------------------------------
 % find four weeks (2*14 days) after such a time has happened
 t_open = corona_.t(it_zero) + 2*14;
@@ -232,42 +240,48 @@ t_open = datetime(datestr( t_open  + dates(istart) ));
 % grid on
 % axis tight
 % xlabel('Time (days)')
-% ylabel('Population')
+% ylabel('Number of people')
 % title(strcat('SEIRt model',{' '},place_name,{' - new cases'}))
 % simple_figure();
 % ------------------------------------------------------------------------------
 % but maybe it would be a better idea to open up until after there are only, 
 % say, 1000 infectious.
 [imax,imaxi] = max(corona_.u(:,3));
-it_infec = find_zero( corona_.u((imaxi+1):end,3) , 5e-2*imax);
-it_infec = imaxi + it_infec;
+it_infec = find_zero( corona_.u((imaxi+0):end,3) , 1e-1*imax);
+if it_infec==1
+ it_infec=imaxi;
+else
+ it_infec = imaxi + it_infec;
+end
 % ------------------------------------------------------------------------------
 ymini = min([min(corona_.u(:,3)),min(corona_.d(:,2))]);
 ymaxi = max([max(corona_.u(:,3)),max(corona_.d(:,2))]);
 % ------------------------------------------------------------------------------
-figure('Renderer', 'painters', 'Position', [0 0 900 400]);
-hold on
-plot(t, corona_.u(:,3),'c-','linewidth',5)
-plot(t, corona_.d(:,2),'k-','linewidth',5)
-plot([t(it_zero),t(it_zero)] , [ymini,ymaxi] ,'--','linewidth',5)
-plot([t_open,t_open] , [ymini,ymaxi] ,'--','linewidth',5)
-plot([t(it_infec),t(it_infec)] , [ymini,ymaxi] ,'--','linewidth',5)
-hold off
-grid on
-axis tight
-legend('Infectious','Dead (cumulative)','Zero new cases','Month after zero new cases','5% of peak infectious left')
-xlabel('Time (days)')
-ylabel('Population')
-title(strcat('SEIRt model',{' '},place_name))
-simple_figure();
+% figure('Renderer', 'painters', 'Position', [0 0 900 400]);
+% hold on
+% plot(t, corona_.u(:,3),'c-','linewidth',5)
+% plot(t, corona_.d(:,2),'k-','linewidth',5)
+% plot([t(it_zero),t(it_zero)] , [ymini,ymaxi] ,'--','linewidth',5)
+% plot([t_open,t_open] , [ymini,ymaxi] ,'--','linewidth',5)
+% plot([t(it_infec),t(it_infec)] , [ymini,ymaxi] ,'--','linewidth',5)
+% hold off
+% grid on
+% axis tight
+% legend('Infectious','Dead (cumulative)','Zero new cases','Month after zero new cases','10% of peak infectious left')
+% xlabel('Time (days)')
+% ylabel('Number of people')
+% title(strcat('SEIRt model',{' '},place_name))
+% simple_figure();
 % ------------------------------------------------------------------------------
 % this part is for plotting in python
 dead       = corona_.d(:,2);
 infectious = corona_.u(:,3);
+quarantined= corona_.u(:,4);
 time_      = datenum(t);
 % ------------------------------------------------------------------------------
 save(strcat(path_,'dead'),'dead')
 save(strcat(path_,'infectious'),'infectious')
+save(strcat(path_,'quarantined'),'quarantined')
 save(strcat(path_,'time_'),'time_')
 save(strcat(path_,'t'),'t')
 save(strcat(path_,'it_infec'),'it_infec')

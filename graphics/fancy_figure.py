@@ -66,6 +66,7 @@ class fancy_figure():
         self.markersize = kwargs.get('markersize',None)
         self.no_frame = kwargs.get('no_frame','off')
         self.linestyle= kwargs.get('linestyle','-')
+        self.frameon= kwargs.get('frameon',False)
         # ......
         # color
         # ......
@@ -157,7 +158,7 @@ class fancy_figure():
         
         locator = dates.AutoDateLocator(minticks=4, maxticks=8)
         ax.xaxis.set_major_locator(locator)
-        ax.xaxis.set_major_formatter(dates.DateFormatter("%d.%b"))
+        ax.xaxis.set_major_formatter(dates.DateFormatter("%d.%b")) # "%d.%b"
         
         ax.set_title(self.title)
         ax.set_xlabel(self.xlabel)
@@ -199,7 +200,7 @@ class fancy_figure():
                 bbox_to_anchor=self.legend_coord,#
                 loc='center left',bbox_transform=ax.transData,borderaxespad=0.)
             else:
-                ax.legend(labels=self.legends,frameon=False)
+                ax.legend(labels=self.legends,frameon=self.frameon,facecolor='white')
     @staticmethod
     def save_me(self,fig):
         # .................

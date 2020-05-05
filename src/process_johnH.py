@@ -9,7 +9,7 @@ province_ = input ("province name (if none then press enter)  : ")
 # set data path
 path_ = '../data/'
 # ------------------------------------------------------------------------------
-# set names to save. maybe fix this for something more clever like ls?
+# set names to read. maybe fix this for something more clever like ls?
 names_=['time_series_covid19_confirmed_global.csv','time_series_covid19_deaths_global.csv','time_series_covid19_recovered_global.csv']
 # ------------------------------------------------------------------------------
 for name_ in names_:

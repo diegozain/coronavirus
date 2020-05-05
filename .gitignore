@@ -3,3 +3,4 @@
 rsync_coronavirus.sh
 *.mat
 *.csv
+__pycache__

@@ -12,7 +12,7 @@ Go to **Examples** below if you're not into reading.
 
 By early April, for the US and Europe, the data, the model, the inversion and the cut-off criteria suggest __late April - early May__.
 
-The pictures below are estimated with data from mid April.
+The picture below are estimated with data from mid April.
 
 ![](pics/US-end.png)
 

@@ -6,7 +6,7 @@ down_d = input(prompt,'s');
 if strcmp(down_d,'y')
  !sh ../src/data_johnH.sh
 end
-% % ----------------------------------------------------------------------------
+% ----------------------------------------------------------------------------
 % extract what you want
 prompt = '\n\n    Do you want to process a different country than last time (y or n):  ';
 down_d = input(prompt,'s');
