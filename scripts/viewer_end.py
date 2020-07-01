@@ -3,8 +3,6 @@ sys.path.append('../graphics/')
 from fancy_figure import fancy_figure
 import numpy as np
 # ------------------------------------------------------------------------------
-midi_s  = 1.7
-# ------------------------------------------------------------------------------
 guarda_path='../pics/'
 path_      ='../data/tmp/'
 # ------------------------------------------------------------------------------
@@ -12,7 +10,14 @@ dpi = 120
 size=[9.6,5.76]
 # ------------------------------------------------------------------------------
 place_name=np.loadtxt(path_+'place_name.txt',dtype='str')
-place_name=place_name.item()
+# ------------------------------------------------------------------------------
+if place_name.size > 1:
+  place_name_=''
+  for i_ in range(place_name.size):
+    place_name_ = place_name_ + ' ' +place_name[i_]
+  place_name = place_name_
+else:
+  place_name=place_name.item()
 # ------------------------------------------------------------------------------
 time_,_,_      =fancy_figure.bring(path_,'time_',0,0)
 infectious,_,_ =fancy_figure.bring(path_,'infectious',0,0)

@@ -251,7 +251,7 @@ it_infec = find_zero( corona_.u((imaxi+0):end,3) , 1e-1*imax);
 if it_infec==1
  it_infec=imaxi;
 else
- it_infec = imaxi + it_infec;
+ it_infec = imaxi + it_infec - 1;
 end
 % ------------------------------------------------------------------------------
 ymini = min([min(corona_.u(:,3)),min(corona_.d(:,2))]);
@@ -287,5 +287,7 @@ save(strcat(path_,'t'),'t')
 save(strcat(path_,'it_infec'),'it_infec')
 % ------------------------------------------------------------------------------
 !python viewer_end.py
+!python viewer_active.py
 % ------------------------------------------------------------------------------
+% print(gcf,name_pic,'-dpng','-r20')
 %}
