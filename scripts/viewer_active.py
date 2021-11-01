@@ -3,8 +3,10 @@ sys.path.append('../graphics/')
 from fancy_figure import fancy_figure
 import numpy as np
 import pandas as pd
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 # ------------------------------------------------------------------------------
-guarda_path='../pics/'
+guarda_path='../pics/active/'
 path_      ='../data/tmp/'
 # ------------------------------------------------------------------------------
 dpi = 120
@@ -33,6 +35,15 @@ else:
 plt_=fancy_figure(
 figsize=size,
 x=dates,
+curve=dead,
+colop='k',
+symbol='.-',
+margin=(0.03,0.03),
+holdon='on').plotter_date()
+# ------------------------------------------------------------------------------
+plt_=fancy_figure(
+figsize=size,
+x=dates,
 curve=active,
 colop='r',
 symbol='.-',
@@ -40,6 +51,7 @@ margin=(0.03,0.03),
 title='Active COVID-19 cases in '+place_name,
 ylabel='Number of people',
 xlabel='Time (days)',
+legends=['Dead','Active'],
 fig_name=place_name+'-active',
 guarda_path=guarda_path,
 guarda=dpi).plotter_date()
